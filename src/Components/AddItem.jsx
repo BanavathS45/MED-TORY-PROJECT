@@ -9,7 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Multiselect from "multiselect-react-dropdown";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import BarcodeScanner from './BarcodeScanner';
+// import React, { useState } from 'react';
+import Barcode from 'react-barcode';
+import PPT from './PPT'
 function AddItem() {
+
+
   const getData = AddItemContext();
   const {
     formData,
@@ -24,7 +32,7 @@ function AddItem() {
     setSuppRes,
     multiSelectRef,
     handleFileChange,
-    unitMeasure,
+    unitMeasure,fileInputRef
   } = getData;
   const style1 = {
     color: "red",
@@ -35,6 +43,12 @@ function AddItem() {
   const [isFormValid, setIsFormValid] = useState(false); // State to track form validity
   const [reorderCheck, setReorderCheck] = useState(false);
 
+
+  const [sku, setSku] = useState('DA-BR-MLK-500G');
+
+  const handleInputChang = (e) => {
+    setSku(e.target.value);
+  };
   const style = {
     width: "70%",
     marginLeft: "auto",
@@ -66,6 +80,8 @@ function AddItem() {
   console.log(cataroty);
   return (
     <>
+    <ToastContainer
+/>
       <Header />
       <div className="d-flex w-100 justify-content-center align-items-center">
         <form className="col-4 w-75">
@@ -398,6 +414,7 @@ function AddItem() {
                 <input
                   type="file"
                   className="form-control"
+                  ref={fileInputRef}
                   id="imageUpload"
                   name="imageUpload"
                   accept="image/png, image/jpeg, image/jpg"
@@ -412,6 +429,7 @@ function AddItem() {
                 <div className="mb-3 p-2 col-lg-12 col-md-12 col-sm-12">
                   <label className="form-label mx-3">Uploaded Image</label>
                   <img
+                
                     src={formData.imageUpload}
                     alt="Uploaded"
                     style={{ maxWidth: "10%", height: "50px" }}
@@ -433,6 +451,35 @@ function AddItem() {
               </div>
             </div>
           </div>
+     
+
+ 
+
+
+  
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h2>Barcode Generator</h2>
+      <input
+        type="text"
+        value={sku}
+        onChange={handleInputChang}
+        placeholder="Enter SKU"
+        style={{ marginBottom: '20px', padding: '10px', width: '300px' }}
+      />
+      <div style={{ marginTop: '20px' }}>
+        <Barcode value={sku} />
+      </div>
+    </div>
+ 
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h2>Scan a Barcode</h2>
+      <BarcodeScanner
+        
+      />
+     <PPT/>
+    </div>
+ 
+
           {/* Preview Button */}
         </form>
       </div>

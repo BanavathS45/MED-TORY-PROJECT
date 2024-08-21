@@ -9,7 +9,8 @@ import axios from "axios";
 import Swal from "sweetalert";
 import swal from "sweetalert";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-
+import { ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Create a context for managing user data
 export const UserContext = createContext();
 
@@ -42,7 +43,7 @@ export const UserProvider = ({ children }) => {
   const multiSelectRef = useRef(null); // Reference for multi-select component
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
   const [viewshow, setviewshow] = useState(false); // State for view modal visibility
-
+  const fileInputRef = useRef(null);
   // Function to handle view modal show
   const handleViewShow = (id) => {
     setviewshow(true);
@@ -198,13 +199,16 @@ export const UserProvider = ({ children }) => {
     new Date().getDate() +
     (new Date().getMonth().toLocaleString() > 10
       ? new Date().getMonth().toLocaleString()
-      : "0" + new Date().getMonth().toLocaleString());
+      : "0" + (new Date().getMonth() + 1).toLocaleString() );
 
   // Form data with generated SKU
   const formDataWithSKU = { ...formData, sku: newSku.toString() };
 
   // Function to handle file input change
   const handleFileChange = (e) => {
+    // const baseUrl = "https://example.com/uploads/"; // Replace with your actual base URL
+    // const uniqueId = Date.now(); // You can use other methods to generate unique IDs
+    // const customUrl = `${baseUrl}${uniqueId}-${e.target.files[0].name}`;
     setImagePreview(e.target.files[0].name);
 
     const file = new FileReader();
@@ -218,6 +222,23 @@ export const UserProvider = ({ children }) => {
     };
   };
 
+  // const handleFileChange = (e) => {
+  //   // Set the image preview to the selected file's name
+  //   setImagePreview(e.target.files[0].name);
+  
+  //   // Generate a custom URL (you can customize this base URL as needed)
+  //   const baseUrl = "https://example.com/uploads/"; // Replace with your actual base URL
+  //   const uniqueId = Date.now(); // You can use other methods to generate unique IDs
+  //   const customUrl = `${baseUrl}${uniqueId}-${e.target.files[0].name}`;
+  
+  //   // Update the form data with the custom URL
+  //   setFormData({
+  //     ...formData,
+  //     imageUpload: customUrl,
+  //   });
+  // };
+  
+
   // Function to handle form submission
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -225,6 +246,9 @@ export const UserProvider = ({ children }) => {
     function resetFormAndModal() {
       if (multiSelectRef.current) {
         multiSelectRef.current.resetSelectedValues();
+      }
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
       setShow(false);
       setFormData({
@@ -237,10 +261,12 @@ export const UserProvider = ({ children }) => {
         initialQuantity: "",
         expirationDate: "",
         reorderLevel: "",
-        suppliers: null,
+        suppliers: [],
         imageUpload: null,
       });
+    
     }
+   
     // Check if the item is being updated
 
     // Check if item is duplicate
@@ -298,14 +324,14 @@ export const UserProvider = ({ children }) => {
       // Add new item to inventory
       try {
         axios
-          .post("http://localhost:8080/addItem", formDataWithSKU)
+          .post("http://localhost:4800/ItemData", formDataWithSKU)
           .then((res) => {
             Swal({
               title: "Success!",
               text: "Item added to inventory successfully",
               icon: "success",
             });
-
+             toast.info("skjfjkdsfjjdsf")
             // Reset form and close modal
             resetFormAndModal();
           });
@@ -422,7 +448,7 @@ export const UserProvider = ({ children }) => {
         handleFileChange,
         handleEdit,
         editBtn,
-        unitMeasure,
+        unitMeasure,fileInputRef
       }}
     >
       {children}

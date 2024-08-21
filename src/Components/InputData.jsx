@@ -20,7 +20,7 @@ import { Link, Route } from "react-router-dom";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Swal from "sweetalert2";
-import { decomposeColor, withWidth } from "@material-ui/core";
+// import { decomposeColor, withWidth } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 
 const InputData = () => {
@@ -84,9 +84,9 @@ const InputData = () => {
     if (selectedRows.length === 0) {
       return;
     }
-
+  
     Swal.fire({
-      title: "Confirm Deletion",
+      title: `Confirm Deletion (${selectedRows.length} items)`,
       text: "Are you sure you want to delete the selected items?",
       icon: "warning",
       showCancelButton: true,
@@ -96,16 +96,18 @@ const InputData = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const idsToDelete = selectedRows.map((row) => row.id);
+  
+        // Collect promises for all delete requests
         Promise.all(
           idsToDelete.map((id) =>
-            axios
-              .delete(`http://localhost:4800/ItemData/${id}`) // Adjust URL as per your API endpoint
-              .then(() => {
-                setExisting(existing.filter((item) => item.id !== id));
-              })
+            axios.delete(`http://localhost:4800/ItemData/${id}`)
           )
         )
           .then(() => {
+            // After all deletions are successful, update the state once
+            setExisting((existing) =>
+              existing.filter((item) => !idsToDelete.includes(item.id))
+            );
             setSelectedRows([]);
             Swal.fire(
               "Deleted!",
@@ -120,7 +122,7 @@ const InputData = () => {
       }
     });
   };
-
+  
   // const handleSingleDelete = (id) => {
   //   Swal.fire({
   //     title: "Confirm Deletion",
