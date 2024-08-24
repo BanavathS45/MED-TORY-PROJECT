@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import BarcodeScanner from './BarcodeScanner';
 // import React, { useState } from 'react';
 import Barcode from 'react-barcode';
-import PPT from './PPT'
+// import PPT from './PPT'
 function AddItem() {
 
 
@@ -42,6 +42,7 @@ function AddItem() {
   const [reorderError, setreorderError] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false); // State to track form validity
   const [reorderCheck, setReorderCheck] = useState(false);
+  const [show, setShow] = useState(true);
 
 
   const [sku, setSku] = useState('DA-BR-MLK-500G');
@@ -476,12 +477,23 @@ function AddItem() {
       <BarcodeScanner
         
       />
-     <PPT/>
+     {/* <PPT/> */}
     </div>
  
 
           {/* Preview Button */}
         </form>
+        <div>
+{
+show ?  <h2>Click Hide Button I will Hide</h2> : <h2>Click show Button then  I will show</h2> 
+}
+   <button onClick={() => setShow(!show)}>
+{
+show  ? "Hide" : "Show"
+}
+   </button>  
+</div>
+
       </div>
     </>
   );

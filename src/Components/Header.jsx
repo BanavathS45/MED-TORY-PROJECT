@@ -30,13 +30,16 @@ const Header = () => {
             {" "}
             <FontAwesomeIcon icon={faBell} style={{ fontSize: "25px" }} onClick={()=>setnotiShow(!notiShow)}/>
             <sup
-              style={{
-                fontSize: "20px",
-                color: "white",
-                backgroundColor: "red",
-                padding: "3px 7px",
-                borderRadius: "50%",
-              }}
+             style={{
+              position:"relative",
+              top:"-40px",
+              left:"10px",
+              fontSize: "15px",
+              color: "white",
+              backgroundColor: "red",
+              padding: "3px 7px",
+              borderRadius: "50%",
+            }}
             >
               {reorderData.length}
             </sup>
@@ -59,7 +62,7 @@ const Header = () => {
       {
         notiShow&& <Notification />
       }
-     <h1>Hello </h1>
+ 
     </>
   );
 };
