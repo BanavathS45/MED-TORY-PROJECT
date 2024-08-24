@@ -472,7 +472,7 @@ function AddItem() {
       </div>
     </div>
  
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+    <div style={{ textAlign: 'center', marginTop: '40px' }}>
       <h2>Scan a Barcode</h2>
       <BarcodeScanner
         
