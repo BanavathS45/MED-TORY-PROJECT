@@ -29,7 +29,6 @@ export const UserProvider = ({ children }) => {
   const [editBtn, setEditBtn] = useState(false);
   const [isupdate, setIsUpdate] = useState(null);
   const handleShow = () => {
-  
     setShow(true);
   };
 
@@ -74,7 +73,7 @@ export const UserProvider = ({ children }) => {
   const handleViwShow = (id) => {
     setviewshow(true);
     axios
-      .get("http://localhost:4800/ItemData/" + id)
+      .get( `http://localhost:8080/getItem/${id}`)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   };
@@ -84,7 +83,7 @@ export const UserProvider = ({ children }) => {
     setloading(true);
     try {
       axios
-        .get("http://localhost:4800/ItemData")
+        .get("http://localhost:8080/getItem")
         .then((response) => {
           if (response.status === 404) {
             throw new Error("Data Not Found");
@@ -168,7 +167,7 @@ export const UserProvider = ({ children }) => {
   // Effect to fetch Unit Msure data
   useEffect(() => {
     setloading(true);
-    setError(true);
+    // setError(true);
     try {
       axios.get("http://localhost:4800/unitofmesure").then((response) => {
         if (response.status === 404) {
@@ -291,7 +290,7 @@ export const UserProvider = ({ children }) => {
       // Update the item
 
       axios
-        .put(`http://localhost:4800/ItemData/${isupdate}`, formDataWithSKU)
+        .put(`http://localhost:8080/getItem/${isupdate}`, formDataWithSKU)
         .then((res) => {
           Swal({
             title: "Success!",
@@ -303,6 +302,8 @@ export const UserProvider = ({ children }) => {
           handleClose(true);
           navigate("/data");
           getItemData();
+          resetFormAndModal()
+          
         })
         .catch((error) => {
           if (error.response && error.response.status === 404) {
@@ -373,6 +374,7 @@ export const UserProvider = ({ children }) => {
 
   // Function to handle item deletion
   const handleDelete = (id) => {
+    alert(id)
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this item!",
@@ -382,7 +384,7 @@ export const UserProvider = ({ children }) => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete(`http://localhost:4800/ItemData/${id}`)
+          .delete(`http://localhost:8080/getItem/${id}`)
           .then((response) => {
             if (response.status === 200) {
               swal("Poof! Your item has been deleted!", {
